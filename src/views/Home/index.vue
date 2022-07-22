@@ -2,17 +2,22 @@
   <div>
     <van-nav-bar class="navbar">
       <template #title>
-        <van-button round @click="$router.push('/search')"><van-icon name="search" />搜索</van-button>
+        <van-button round @click="$router.push('/search')"
+          ><van-icon name="search" />搜索</van-button
+        >
       </template>
     </van-nav-bar>
 
     <van-tabs v-model="active" :swipeable="true">
       <van-tab :title="item.name" v-for="item in myChannels" :key="item.id">
+        <!-- 文章列表 -->
         <ArticleList :id="item.id"></ArticleList>
       </van-tab>
+      <!-- 更多按钮 -->
       <span class="toutiao toutiao-gengduo" @click="showPopup"></span>
     </van-tabs>
 
+    <!-- 弹层 -->
     <EditChannelPopup
       ref="popup"
       :myChannels="myChannels"

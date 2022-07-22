@@ -1,6 +1,10 @@
 <template>
   <div>
-    <van-pull-refresh v-model="refreshLoading" @refresh="loadNextPage" success-text="刷新成功">
+    <van-pull-refresh
+      v-model="refreshLoading"
+      @refresh="loadNextPage"
+      success-text="刷新成功"
+    >
       <van-list
         offset="20"
         @load="loadNextPage"
@@ -14,6 +18,7 @@
           v-for="item in articles"
           :key="item.art_id"
           :articleInfo="item"
+          :id="item.art_id"
         ></ArticleItem>
       </van-list>
     </van-pull-refresh>
