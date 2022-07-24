@@ -18,7 +18,7 @@
           </van-col>
           <van-col span="11">
             <van-row class="code-row" type="flex" align="center" justify="end">
-              <van-button round size="mini" class="code-btn"
+              <van-button round size="mini" class="code-btn" @click="$router.push('/user')"
                 >编辑资料</van-button
               >
             </van-row>
