@@ -69,9 +69,16 @@
       ></van-tabbar-item>
       <van-tabbar-item
         class="icon-size"
-        icon="good-job-o"
-        :badge="likeCount"
+        icon="good-job"
         @click="thumbsFn"
+        v-if="isLike"
+        style="color: skyblue"
+      ></van-tabbar-item>
+      <van-tabbar-item
+        class="icon-size"
+        icon="good-job-o"
+        @click="thumbsFn"
+        v-else
       ></van-tabbar-item>
       <van-tabbar-item class="icon-size" icon="share-o"></van-tabbar-item>
     </van-tabbar>
@@ -94,9 +101,9 @@
         show-word-limit
         class="popup-txt"
       />
-      <van-button class="popup-btn">发布</van-button>
+      <van-button class="popup-btn" @click="sendMsg">发布</van-button>
     </van-popup>
-    <CommentsLIst></CommentsLIst>
+    <CommentsLIst :artID="articleID" ref="commentslist"></CommentsLIst>
   </div>
 </template>
 
@@ -111,7 +118,8 @@ import {
   collected,
   unCollected,
   following,
-  unFollowing
+  unFollowing,
+  setArticleReply
 } from '@/api'
 import CommentsLIst from './components/CommentsLIst'
 export default {
@@ -122,7 +130,6 @@ export default {
       popupShow: false,
       message: '',
       articleID: this.$route.query.id,
-      likeCount: 0,
       isLike: false,
       isCollected: false,
       isFollow: false
@@ -145,6 +152,7 @@ export default {
         this.likeCount = data.data.like_count
         this.isCollected = data.data.is_collected
         this.isFollow = data.data.is_followed
+        this.isLike = data.data.attitude === 1
       } catch (error) {
         console.log(error)
       }
@@ -164,11 +172,9 @@ export default {
     thumbsFn () {
       if (!this.isLike) {
         this.thumbsUp()
-        this.likeCount++
         this.isLike = true
       } else {
         this.unThumbsUp()
-        this.likeCount--
         this.isLike = false
       }
     },
@@ -198,6 +204,18 @@ export default {
         await unFollowing(this.articleInfo.aut_id)
         this.isFollow = false
         this.$toast('取消关注用户成功')
+      }
+    },
+    // 对文章进行评论
+    async sendMsg () {
+      try {
+        const { data } = await setArticleReply(this.articleID, this.message)
+        console.log(data)
+        this.$refs.commentslist.getCommentsInit()
+        this.popupShow = false
+        this.message = ''
+      } catch (error) {
+        console.log(error)
       }
     }
   }
