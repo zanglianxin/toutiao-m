@@ -32,6 +32,10 @@ export default {
       this.$emit('UpdateNameCancel')
     },
     async onClickSave () {
+      if (this.msg.trim().length === 0) {
+        this.msg = ''
+        return this.$toast.fail('内容不能为空')
+      }
       this.$toast.loading({
         message: '更新中...',
         forbidClick: true,

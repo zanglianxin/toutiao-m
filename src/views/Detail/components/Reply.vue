@@ -127,6 +127,10 @@ export default {
       this.popupShow = true
     },
     async sendMsg () {
+      if (this.message.trim().length === 0) {
+        this.message = ''
+        return this.$toast.fail('内容不能为空')
+      }
       try {
         const { data } = await setArticleReply(
           this.comId,

@@ -208,12 +208,17 @@ export default {
     },
     // 对文章进行评论
     async sendMsg () {
+      if (this.message.trim().length === 0) {
+        this.message = ''
+        return this.$toast.fail('内容不能为空')
+      }
       try {
         const { data } = await setArticleReply(this.articleID, this.message)
         console.log(data)
         this.$refs.commentslist.getCommentsInit()
         this.popupShow = false
         this.message = ''
+        this.articleInfo.comm_count++
       } catch (error) {
         console.log(error)
       }
